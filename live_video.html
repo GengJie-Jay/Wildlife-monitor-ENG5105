@@ -1,0 +1,98 @@
+
+<html>
+  <head>
+    <title>Live Video</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="static/style.css">
+    <script type="text/javascript" src="../static/jquery.min.js"> </script>
+
+    <!-- Movement Scripts -->
+    <script type="text/javascript"> 
+        $(function() { 
+            $("#up").click(function (event) { 
+                $.getJSON('/up_func', {}, function(data) {}); 
+                return false; 
+            }); 
+            $("#down").click(function (event) { 
+                $.getJSON('/down_func', {}, function(data) {}); 
+                return false; 
+            }); 
+            $("#left").click(function (event) { 
+                $.getJSON('/left_func', {}, function(data) {}); 
+                return false; 
+            });
+            $("#right").click(function (event) { 
+                $.getJSON('/right_func', {}, function(data) {}); 
+                return false; 
+            });
+        });
+    </script>
+
+    <!-- Ultrasonic distance update script -->
+    <script type="text/javascript">
+        $(document).ready(function(){
+            setInterval(function(){
+                $.getJSON('/get_distance', function(data) {
+                    var displayedDistance = parseFloat(data.distance).toFixed(2); // Convert to two decimal places
+                    $('#distance-value').text(displayedDistance);
+                });
+            }, 1000);  // Query every second
+        });
+    </script>
+  
+  </head>
+  
+  <body background="../static/background.jpg"
+        style="background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: 100% 100%;">
+
+    <h1 style="color: chartreuse;
+              text-align: center;
+              -webkit-text-stroke: 1px black;">Live Video</h1>
+
+    <!-- Video feed -->
+    <div style="text-align: center;">
+        <img src="{{ url_for('video_feed') }}">
+    </div>
+
+    <!-- Audio feed -->
+    <div style="text-align: center; margin-top: 10px;">
+        <audio controls autoplay>
+            <source src="{{ url_for('audio_feed') }}" type="audio/x-wav;codec=pcm">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    <!-- Ultrasonic distance display -->
+    <div style="text-align: center; margin-top: 10px;">
+        <span>Distance: </span><span id="distance-value"></span><span> m</span>
+    </div>
+
+    <!-- Movement buttons -->
+    <div style="text-align: center;">
+       <button class="button_style" id="up" style="margin-top: 10px;">Up</button>
+    </div>
+    <div style="text-align: center;">
+       <button class="button_style" id="left" style="margin-top: 5px;">Left</button>
+       <button class="button_style" id="down">Down</button>
+       <button class="button_style" id="right">Right</button>
+    </div>
+
+    <!-- Other buttons -->
+    <div style="text-align: center;">
+        <a href="{{ url_for('login') }}">
+           <button class="button_style" id="back" style="margin-top: 5px;">Back</button>
+        </a>
+        <a href="{{ url_for('logout') }}">
+           <button class="button_style" id="logout" style="margin-top: 5px;">Logout</button>
+        </a>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="{{ url_for('Email') }}">
+           <button class="button_style" id="Email" style="margin-top: 5px;">Email</button>
+        </a>
+    </div>
+  </body>
+</html>
